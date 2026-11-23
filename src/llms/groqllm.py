@@ -9,9 +9,10 @@ class GroqLLM:
 
     def get_llm(self):
         try:
-            print(os.getenv("GROQ_API_KEY"))
-            os.environ["GROQ_API_KEY"]=self.groq_api_key=os.getenv("GROQ_API_KEY")
-            llm=ChatGroq(api_key=self.groq_api_key,model="openai/gpt-oss-120b")
+            self.groq_api_key = os.getenv("GROQ_API_KEY")
+            if not self.groq_api_key:
+                raise ValueError("GROQ_API_KEY environment variable is missing.")
+            llm = ChatGroq(api_key=self.groq_api_key, model="openai/gpt-oss-20b", temperature=0, max_tokens=8192,reasoning_effort="low")
             return llm
         except Exception as e:
-            raise ValueError("Error occurred with exception : {e}")
+            raise ValueError(f"Error occurred with exception : {e}")
